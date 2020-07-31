@@ -4,6 +4,7 @@ const config = require('config');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const {User, validate} = require('../models/user');
+const {ChatMessage} = require('../models/chatMessage');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -29,10 +30,20 @@ router.post('/', async (req, res) => {
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'firstName', 'lastName','email','phone']));
 });
 
-
-router.get('/getUser', auth, async (req, res) => {
-  const users = await User.find().sort('name');
+router.get('/getUser/:id', auth, async (req, res) => {
+  const users = await User.find({"_id": {$ne: req.user._id}}).sort('name');
   res.send(users);
+});
+
+router.get('/getMessages/:toId/:fromId', auth, async (req, res) => {
+  const query = {
+    $or : [
+        { $and : [ { toId: req.params.toId  }, { fromId: req.params.fromId } ] },
+        { $and : [ { fromId: req.params.toId }, {toId: req.params.fromId } ] }
+    ]
+  }
+  const messages = await ChatMessage.find(query).sort('created_at');
+  res.send(messages);
 });
 
 module.exports = router; 

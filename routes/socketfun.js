@@ -5,8 +5,6 @@ const http = require("http");
 const app = express();
 const socketIo = require("socket.io");
 
-const getApiAndEmit = 
-
 router.get('/', auth, async (req, res, socket) => {
     const server = http.createServer(app);
     const io = socketIo(server);
