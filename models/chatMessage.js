@@ -16,6 +16,10 @@ const chatMessageSchema = new mongoose.Schema({
     minlength: 1,
     maxlength: 2048,
   },
+  is_read: {
+    type: Number,
+    required: true
+  },
   created_date : {
     type: Date,
     default: Date.now 
@@ -28,6 +32,7 @@ function validateChatMessage(chatMessage) {
   const schema = {
     fromId: Joi.string().required(),
     toId: Joi.string().required(),
+    is_read : Joi.number().integer().required(),
     message: Joi.string().min(1).max(2048).required()
   };
 

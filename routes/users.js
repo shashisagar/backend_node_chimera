@@ -32,10 +32,28 @@ router.post('/', async (req, res) => {
 
 router.get('/getUser/:id', auth, async (req, res) => {
   const users = await User.find({"_id": {$ne: req.user._id}}).sort('name');
-  res.send(users);
+  const userinfo = JSON.parse(JSON.stringify(users));
+  const itemsArray = []; 
+  userinfo.forEach(async function (arrayItem) {
+    const messages = await ChatMessage.find({"fromId": arrayItem._id,"is_read" : 0});
+    const user_message = JSON.parse(JSON.stringify(messages));
+    Object.assign(arrayItem, {message: user_message});
+   itemsArray.push(arrayItem);
+  });
+  setTimeout(function () {
+    res.send(itemsArray);
+  }, 1000)
 });
 
 router.get('/getMessages/:toId/:fromId', auth, async (req, res) => {
+
+  var myquery = { toId: req.params.fromId, fromId : req.params.toId };
+  var newvalues = { $set: {is_read: 1} };
+  ChatMessage.updateMany(myquery, newvalues, function(err, res) {
+    if (err) throw err;
+    console.log("1 document updated");
+  });
+
   const query = {
     $or : [
         { $and : [ { toId: req.params.toId  }, { fromId: req.params.fromId } ] },
