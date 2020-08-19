@@ -30,15 +30,18 @@ router.post('/', async (req, res) => {
   res.header('x-auth-token', token).send(_.pick(user, ['_id', 'firstName', 'lastName','email','phone']));
 });
 
-router.get('/getUser/:id', auth, async (req, res) => {
-  const users = await User.find({"_id": {$ne: req.user._id}}).sort('name');
-  const userinfo = JSON.parse(JSON.stringify(users));
-  const itemsArray = []; 
+router.get('/getUser/:id', auth, async (req, res) => { 
+  let users = await User.find({"_id": {$ne: req.user._id}});
+  let userinfo = JSON.parse(JSON.stringify(users));
+  let itemsArray = []; 
   userinfo.forEach(async function (arrayItem) {
-    const messages = await ChatMessage.find({"fromId": arrayItem._id,"is_read" : 0});
-    const user_message = JSON.parse(JSON.stringify(messages));
-    Object.assign(arrayItem, {message: user_message});
-   itemsArray.push(arrayItem);
+    let messages = await ChatMessage.find({   $or : [
+      { $and : [ { toId: arrayItem._id }, { fromId: req.user._id } ] },
+      { $and : [ { toId: req.user._id }, {fromId: arrayItem._id } ] }
+    ]});
+    let user_message = JSON.parse(JSON.stringify(messages));
+      Object.assign(arrayItem, {message: user_message});
+      itemsArray.push(arrayItem);
   });
   setTimeout(function () {
     res.send(itemsArray);
@@ -51,7 +54,6 @@ router.get('/getMessages/:toId/:fromId', auth, async (req, res) => {
   var newvalues = { $set: {is_read: 1} };
   ChatMessage.updateMany(myquery, newvalues, function(err, res) {
     if (err) throw err;
-    console.log("1 document updated");
   });
 
   const query = {

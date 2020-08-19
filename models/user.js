@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+var Schema = mongoose.Schema;
+
+const userSchema = new Schema({
   firstName: {
     type: String,
     required: true,
@@ -35,6 +37,10 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 255,
     unique: true
+  },
+  messages: { 
+    type: Schema.Types.ObjectId,
+    ref: "ChatMessage"
   },
   isAdmin: Boolean
 });
