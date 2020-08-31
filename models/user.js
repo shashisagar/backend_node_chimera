@@ -34,9 +34,8 @@ const userSchema = new Schema({
   phone: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 10,
     maxlength: 255,
-    unique: true
   },
   messages: { 
     type: Schema.Types.ObjectId,
@@ -58,7 +57,7 @@ function validateUser(user) {
     lastName: Joi.string().min(5).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
-    phone: Joi.string().min(5).max(50).required(),
+    phone: Joi.string().min(10).max(50).required(),
   };
 
   return Joi.validate(user, schema);

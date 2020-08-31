@@ -45,7 +45,7 @@ router.get('/getUser/:id', auth, async (req, res) => {
   });
   setTimeout(function () {
     res.send(itemsArray);
-  }, 1000)
+  }, 500)
 });
 
 router.get('/getMessages/:toId/:fromId', auth, async (req, res) => {
