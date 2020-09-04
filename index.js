@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
         updateNicknames();
     });
 
-    function updateNicknames(){
+    function updateNicknames() {
         io.emit('usernames', users);
     }
 });
