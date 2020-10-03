@@ -9,9 +9,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 
-router.get('/me', auth, async (req, res) => {
-  const user = await User.findById(req.user._id).select('-password');
-  res.send(user);
+router.get('/me', async (req, res) => {
+  console.log("here");
+  // const user = await User.findById(req.user._id).select('-password');
+  // res.send(user);
 });
 
 router.post('/', async (req, res) => {
