@@ -17,7 +17,7 @@ require('./startup/validation')();
 
 var users = {};
 io.on("connection", (socket) => {
-    io.set('transports', ['websocket']);
+    io.set('transports', ['websocket','polling']);
 
     socket.on('adduser', function(data) {
         users[socket.id] = data._id;
