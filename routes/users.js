@@ -10,7 +10,8 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/me', (req, res) => {
-  console.log("here");
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World!');
   // const user = await User.findById(req.user._id).select('-password');
   // res.send(user);
 });
