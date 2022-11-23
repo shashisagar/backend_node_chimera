@@ -23,7 +23,7 @@
     "lodash": "^4.17.4",
     "mongoose": "^5.0.2",
     "nodemon": "^2.0.4",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "winston": "^2.4.0",
     "winston-mongodb": "^3.0.0"
   }
